@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
   @Slf4j
   @SpringBootTest
@@ -62,7 +61,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     @DisplayName("게시글 수정")
     void updateById() {
-      Long boardId = 25L;
+      Long boardId = 13L;
       Board board = new Board();
       board.setTitle("홍길동의 행적");
       board.setContent("그는 나타났다 사라졌다");
@@ -72,8 +71,8 @@ import static org.junit.jupiter.api.Assertions.*;
       Optional<Board> optionalBoard = boardDao.findById(boardId);
       Board modifiedBoard = optionalBoard.orElseThrow();
 
-      Assertions.assertThat(modifiedBoard.getTitle()).isEqualTo("제목이 수정됨");
-      Assertions.assertThat(modifiedBoard.getTitle()).isEqualTo("내용이 수정됨");
+      Assertions.assertThat(modifiedBoard.getTitle()).isEqualTo("홍길동의 행적");
+      Assertions.assertThat(modifiedBoard.getContent()).isEqualTo("그는 나타났다 사라졌다");
 
 
     }
@@ -129,6 +128,28 @@ import static org.junit.jupiter.api.Assertions.*;
       System.out.println("생성된 board_id = " + generatedId);
       assertThat(generatedId).isNotNull();
       assertThat(generatedId).isGreaterThan(0L);
+    }
+    @Test
+    @DisplayName("디테일 폼에 값이 잘 들어오는지 확인")
+    void findById_shouldReturnBoardWithCorrectValues() {
+      // given
+      Board board = new Board();
+      board.setTitle("디테일 제목");
+      board.setWriter("작성자A");
+      board.setContent("디테일 내용");
+
+      Long savedId = boardDao.save(board);
+
+      // when
+      Optional<Board> foundBoard = boardDao.findById(savedId);
+
+      // then
+      assertThat(foundBoard).isPresent();
+      Board result = foundBoard.get();
+      assertThat(result.getBoardId()).isEqualTo(savedId);
+      assertThat(result.getTitle()).isEqualTo("디테일 제목");
+      assertThat(result.getWriter()).isEqualTo("작성자A");
+      assertThat(result.getContent()).isEqualTo("디테일 내용");
     }
   }
 

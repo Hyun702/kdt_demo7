@@ -63,12 +63,12 @@
         if(!confirm('삭제 하시겠습니까?')) return;
         const $brm = document.getElementById('brm');
         $brm.submit();
-      }, false)
+      }, false);
     // 글 쓰기
       const $btnAdd = document.getElementById('btnAdd');
       $btnAdd.addEventListener('click', e=>{
         window.location.href = `/boards/add`;
-      });
+      }, false);
 
   </script>
 </body>

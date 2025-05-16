@@ -74,7 +74,7 @@ public class BoardDAOImpl implements BoardDAO {
   @Override
   public List<Board> boardAll() {
     StringBuffer sql = new StringBuffer();
-    sql.append(" SELECT * ");
+    sql.append(" SELECT board_id, title, writer, content, created_date, modified_date ");
     sql.append(" FROM board ");
     sql.append(" ORDER BY board_id DESC ");
 
@@ -92,7 +92,7 @@ public class BoardDAOImpl implements BoardDAO {
   @Override
   public Optional<Board> findById(Long id) {
     StringBuffer sql = new StringBuffer();
-    sql.append(" SELECT  title, writer, content, created_date ");
+    sql.append(" SELECT  board_id, title, writer, content, created_date, modified_date ");
     sql.append(" FROM    board ");
     sql.append(" WHERE   board_id = :id ");
 

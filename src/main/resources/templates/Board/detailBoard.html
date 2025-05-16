@@ -91,7 +91,7 @@
     // 수정
     const $btnUpdate = document.getElementById('btnUpdate');
     $btnUpdate.addEventListener('click', e => {
-      const $boardId = document.getElementById('boardId');
+      const $boardId = document.getElementById('boardId')
       const boardId  = $boardId.value;
       location.href  = `/boards/${boardId}/edit`;
     }, false);
@@ -109,7 +109,7 @@
       $modalDel.showModal();
 
       $modalDel.addEventListener('close', e => {
-        console.log($modalDal.returnValue);
+        console.log($modalDel.returnValue);
         if ($modalDel.returnValue == 'yes') {
           location.href = `/boards/${boardId}/del`;
         } else {
@@ -131,7 +131,7 @@
     const $btnBoardAll = document.getElementById('btnBoardAll');
     $btnBoardAll.addEventListener('click', e=>{
       location.href = `/boards`;
-    })
+    }, false)
 
 
 

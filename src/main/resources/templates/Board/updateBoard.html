@@ -36,7 +36,7 @@
     height: 150px;
   }
 
-  .field-err {
+  .fields-err {
     color: red;
     font-size: 0.8em;
     margin-top: 3px;
@@ -58,6 +58,7 @@
 <body>
   <h3>게시글 수정</h3>
   <form id="brm" th:action="@{/boards/{id}/edit(id=*{boardId})}" method="post" th:object="${updateForm}">
+
     <div th:if="${#fields.hasGlobalErrors()}">
       <p class="global-err" th:each="err=${#fields.globalErrors()}" th:text="${err}"></p>
     </div>
@@ -71,8 +72,8 @@
     <div>
       <label for="content">내용</label>
       <textarea name="content" id="content" rows="5" cols="20" th:text="*{content}"></textarea>
-      <span class="field-err" th:each="err: ${#fields.errors('content')}" th:text="${err}"></span>
-      <span class="field-err" id="errContent"></span>
+      <span class="fields-err" th:each="err: ${#fields.errors('content')}" th:text="${err}"></span>
+      <span class="fields-err" id="errContent"></span>
     </div>
 
     <div>
@@ -81,6 +82,7 @@
     </div>
   </form>
   <script type="module">
+
     // 수정
     import { getBytesSize } from '/js/common.js';
 
@@ -103,13 +105,14 @@
       }
 
       brm.submit();
-    })
+    }, false);
 
     //목록
     const $btnBoardAll = document.getElementById('btnBoardAll');
     $btnBoardAll.addEventListener('click', e => {
-      location.href = `/boards`
-    })
+      location.href = `/boards`;
+    }, false);
+
   </script>
 
 </body>
