@@ -53,8 +53,8 @@ public class BoardDAOImpl implements BoardDAO {
   @Override
   public Long save(Board board) {
     StringBuffer sql = new StringBuffer();
-    sql.append("INSERT INTO board (board_id, title, content, writer, created_date, modified_date)");
-    sql.append("VALUES (board_seq.nextval, :title, :content, :writer, sysdate, sysdate)");
+    sql.append("INSERT INTO board (board_id, title, writer, content, created_date, modified_date)");
+    sql.append("VALUES (board_seq.nextval, :title, :writer, :content, sysdate, sysdate)");
 
     SqlParameterSource param = new BeanPropertySqlParameterSource(board);
 

@@ -1,0 +1,16 @@
+package com.example.bbsdemo.web.form.Board;
+
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class DetailForm {
+
+  private Long boardId;
+  private String title;
+  private String writer;
+  private String content;
+  private LocalDateTime createdDate;
+
+}

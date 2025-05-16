@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>글 작성</title>
+</head>
+<style>
+  body{
+    font-family: sans-serif;
+    padding: 20px;
+  }
+  h3{
+    text-align:center;
+    margin-bottom: 20px;
+  }
+  label{
+    display: block;
+    margin: 10px 0 5px;
+  }
+
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid gainsboro;
+    box-sizing: border-box;
+  }
+
+  textarea{
+    resize: vertical;
+    height: 150px;
+  }
+  .field-err{
+    color: red;
+    font-size: 0.8em;
+    margin-top: 3px;
+  }
+  .global-err{
+    color: red;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  button{
+    padding: 6px 16px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+
+
+  
+</style>
+<body>
+<h3>글 작성</h3>
+<form id="brm" action="/boards/add" method="post" th:object="${saveForm}">
+  <div th:if="${#fields.hasGlobalErrors()}">
+    <p class="global-err" th:each="err: ${fields.globalErrors()}" th:text="${err}"></p>
+  </div>
+
+  <div>
+    <label for="title">제목</label>
+    <input type="text" name="title" id="title" th:value="*{title}">
+    <span class="field-err" th:each="err: ${#fields.errors('title')}" th:text="${err}"></span>
+    <span class="field-err" id="errTitle"></span>
+  </div>
+
+  <div>
+    <label for="content">내용</label>
+    <textarea name="content" id="content" rows="5" cols="20" th:text="*{content}" ></textarea>
+    <span class="field-err" th:each="err: ${#fields.errors('content')}" th:text="${err}"></span>
+    <span class="field-err" id="errContent"></span>
+  </div>
+
+  <div>
+    <label for="writer">작성자</label>
+    <input type="text" name="writer" id="writer" th:value="*{writer}">
+    <span class="field-err" th:each="err: ${#fields.errors('writer')}" th:text="${err}"></span>
+    <span class="field-err" id="errWriter"></span>
+  </div>
+</form>
+  <div>
+    <button type="submit" id="btnAdd">등록</button>
+    <button type="button" id="btnBoardAll">목록</button>
+  </div>
+
+  <script>
+      //등록
+      const $btnAdd = document.getElementById('btnAdd');
+      $btnAdd.addEventListener('click', e=>{
+        e.preventDefault();
+
+        if(title.value.trim().length == 0){
+          errTitle.textContent = '제목을 입력하시오';
+          title.focus();
+          return;
+        }else{
+          errTitle.textContent ='';
+        }
+
+        if(content.value.trim().length == 0){
+          errContent.textContent = '내용을 입력하시오';
+          title.focus();
+          return;
+        }else{
+          errContent.textContent = '';
+        }
+
+        if(writer.value.trim().length == 0){
+          errWriter.textContent = '작성자를 입력하시오';
+        }else{
+          errWriter.textContent = '';
+        }
+
+        brm.submit();
+      });
+      
+      //목록
+      const $btnBoardAll = document.getElementById('btnBoardAll');
+      $btnBoardAll.addEventListener('click', e=>{
+          location.href = `/boards`;
+      });
+
+  </script>
+</body>
+</html>

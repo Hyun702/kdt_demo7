@@ -1,7 +1,10 @@
 package com.example.bbsdemo.domain.Board;
 
 import com.example.bbsdemo.domain.entity.Board;
+import com.example.bbsdemo.web.form.Board.DetailForm;
+import com.example.bbsdemo.web.form.Board.UpdateForm;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +14,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
   @Slf4j
   @SpringBootTest
 
-  class BoardDAOImplTest  {
+  class BoardDAOImplTest {
 
     @Autowired
     BoardDAO boardDao;
@@ -39,25 +43,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @Test
     @DisplayName("게시판 조회")
-    void findAll(){
+    void findAll() {
       List<Board> boards = boardDao.boardAll();
       for (Board board : boards) {
-        log.info("게시물= {}",board);
+        log.info("게시물= {}", board);
       }
     }
 
     @Test
     @DisplayName("게시글 조회")
-    void findById(){
+    void findById() {
       Long boardId = 7L;
       Optional<Board> optionalBoard = boardDao.findById(boardId);
       Board findByboard = optionalBoard.orElseThrow();
-      log.info("optionalBoard = {}",optionalBoard);
+      log.info("findByboard = {}", findByboard);
     }
 
     @Test
     @DisplayName("게시글 수정")
-    void updateById(){
+    void updateById() {
       Long boardId = 25L;
       Board board = new Board();
       board.setTitle("홍길동의 행적");
@@ -65,25 +69,68 @@ import static org.junit.jupiter.api.Assertions.*;
       int rows = boardDao.updateById(boardId, board);
       log.info("수정된 게시글 수 = {}", rows);
 
+      Optional<Board> optionalBoard = boardDao.findById(boardId);
+      Board modifiedBoard = optionalBoard.orElseThrow();
+
+      Assertions.assertThat(modifiedBoard.getTitle()).isEqualTo("제목이 수정됨");
+      Assertions.assertThat(modifiedBoard.getTitle()).isEqualTo("내용이 수정됨");
+
 
     }
 
     @Test
     @DisplayName("게시글 삭제")
-    void deleteByid(){
+    void deleteByid() {
       Long boardId = 21L;
       int rows = boardDao.DeleteById(boardId);
       log.info("삭제된 게시글 수 = {}", rows);
+      Assertions.assertThat(rows).isEqualTo(1);
 
     }
 
     @Test
     @DisplayName("게시글 삭제")
-    void deleteByids(){
-      List<Long> ids = List.of(25L,23L);
+    void deleteByids() {
+      List<Long> ids = List.of(25L, 23L);
       int rows = boardDao.DeleteByIds(ids);
       log.info("삭제된 게시글 수 = {}", rows);
+      Assertions.assertThat(rows).isEqualTo(2);
 
     }
 
-}
+    @Test
+    @DisplayName("ID 값 주입 후 확인")
+    void checkSetValues() {
+      DetailForm detailForm = new DetailForm();
+      detailForm.setBoardId(100L);
+      UpdateForm updateForm = new UpdateForm();
+      updateForm.setBoardId(200L);
+      Board board = new Board();
+      board.setBoardId(300L);
+
+      log.info("detailForm.boardId = {}", detailForm.getBoardId()); // 100
+      log.info("updateForm.boardId = {}", updateForm.getBoardId()); // 200
+      log.info("board.boardId = {}", board.getBoardId());           // 300
+    }
+
+    @Test
+    @DisplayName("아 욕나오네")
+    void save_shouldReturnGeneratedBoardId() {
+      // given
+      Board board = new Board();
+      board.setTitle("테스트 제목");
+      board.setWriter("테스터");
+      board.setContent("테스트 내용입니다.");
+
+      // when
+      Long generatedId = boardDao.save(board);
+
+      // then
+      System.out.println("생성된 board_id = " + generatedId);
+      assertThat(generatedId).isNotNull();
+      assertThat(generatedId).isGreaterThan(0L);
+    }
+  }
+
+
+

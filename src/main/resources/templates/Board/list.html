@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+</head>
+<style>
+  table{
+    width:80%;
+    margin : 20px auto;
+  }
+  th,td{
+    padding:8px;
+    text-align: center;
+    border: 1px solid #ccc
+  }
+  th{
+    background-color: #f0e6e6
+  }
+  h1{
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+  <h1>게시판 목록</h1>
+
+  <!--  게시물 목록-->
+  <form id="brm" th:action="@{/boards/del}" method="post">
+    <table>
+      <thead>
+      <tr>
+        <th>선택</th>
+        <th>ID</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성날짜</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="board : ${list}">
+        <td><input type="checkbox" name="boardIds" th:value="${board.boardId}"></td>
+        <td th:text="${board.boardId}">1</td>
+        <td><a th:href="@{/boards/{id}(id=${board.boardId})}" th:text="${board.title}">제목</a></td>
+        <td th:text="${board.writer}">작성자</td>
+        <td th:text="${board.createdDate}">작성날짜</td>
+      </tr>
+      </tbody>
+    </table>
+  </form>
+  <!-- 삭제 버튼-->
+  <div>
+    <button id="btnDel">글 삭제</button>
+    <button id="btnAdd">글 쓰기</button>
+  </div>
+
+  <script>
+    // <!-- 삭제 -->
+      const $btnDel = document.getElementById('btnDel');
+      $btnDel.addEventListener('click', e=>{
+        if(!confirm('삭제 하시겠습니까?')) return;
+        const $brm = document.getElementById('brm');
+        $brm.submit();
+      }, false)
+    // 글 쓰기
+      const $btnAdd = document.getElementById('btnAdd');
+      $btnAdd.addEventListener('click', e=>{
+        window.location.href = `/boards/add`;
+      });
+
+  </script>
+</body>
+</html>

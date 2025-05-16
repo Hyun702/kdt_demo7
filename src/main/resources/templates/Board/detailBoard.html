@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    h3{
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin: 10px 0 5px;
+    }
+    p{
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="text"],
+    textarea {
+        width: 100%;
+        padding: 6px;
+        border: 1px solid gainsboro;
+        box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 150px;
+    }
+
+    button {
+      padding: 6px 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h3>게시글 상세 보기</h3>
+  <form action="" method="" th:object="${detailForm}">
+    <div>
+      <label>게시글 아이디</label>
+      <input type="text" th:field="*{boardId}" readonly>
+    </div>
+
+    <div>
+      <label>제목</label>
+      <p th:text="*{title}">제목</p>
+    </div>
+
+    <div>
+      <label>내용</label>
+      <textarea name="content" id="content" rows="5" cols="20" th:text="*{content}" readonly></textarea>
+    </div>
+
+    <div>
+      <label>작성자</label>
+      <p th:text="*{writer}">작성자</p>
+    </div>
+
+    <div>
+      <label>작성일</label>
+      <p th:text="*{#temporals.format(createdDate, 'yyyy-MM-dd HH:mm')}">작성일</p>
+    </div>
+
+    <div>
+      <button type="button" id="btnUpdate">수정</button>
+      <button type="button" id="btnDelete">삭제</button>
+      <button type="button" id="btnBoardAll">목록</button>
+    </div>
+
+  </form>
+
+  <dialog id="modalDel">
+    <p>삭제하시겠습니까?</p>
+    <button class="btnYes">네</button>
+    <button class="btnNo">아니오</button>
+  </dialog>
+
+  <script>
+    // 수정
+    const $btnUpdate = document.getElementById('btnUpdate');
+    $btnUpdate.addEventListener('click', e => {
+      const $boardId = document.getElementById('boardId');
+      const boardId  = $boardId.value;
+      location.href  = `/boards/${boardId}/edit`;
+    }, false);
+
+    // 삭제
+    const $btnDelete = document.getElementById('btnDelete');
+    $btnDelete.addEventListener('click', e => {
+      const $boardId = document.getElementById('boardId');
+      const boardId = $boardId.value;
+
+      const $modalDel = document.getElementById('modalDel');
+      const $btnYes = document.querySelector(".btnYes");
+      const $btnNo = document.querySelector(".btnNo");
+
+      $modalDel.showModal();
+
+      $modalDel.addEventListener('close', e => {
+        console.log($modalDal.returnValue);
+        if ($modalDel.returnValue == 'yes') {
+          location.href = `/boards/${boardId}/del`;
+        } else {
+          return;
+        }
+      }, { once:true });
+
+      $btnYes.addEventListener('click', e => {
+        $modalDel.close("yes");
+      });
+
+      $btnNo.addEventListener('click', e => {
+        $modalDel.close("no")
+      });
+
+    }, false);
+
+    // 목록
+    const $btnBoardAll = document.getElementById('btnBoardAll');
+    $btnBoardAll.addEventListener('click', e=>{
+      location.href = `/boards`;
+    })
+
+
+
+  </script>
+
+
+
+</body>
+
+</html>
