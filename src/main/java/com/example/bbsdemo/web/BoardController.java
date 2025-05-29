@@ -1,6 +1,7 @@
 package com.example.bbsdemo.web;
 
 
+import com.example.bbsdemo.domain.BoardCommentSVC.CommentSVC;
 import com.example.bbsdemo.domain.BoardSVC.BoardSVC;
 import com.example.bbsdemo.domain.entity.Board;
 import com.example.bbsdemo.web.form.Board.DetailForm;
@@ -28,6 +29,8 @@ public class BoardController {
 
   @Autowired
   private final BoardSVC boardSVC;
+  @Autowired
+  private final CommentSVC commentSVC;
 
   // 게시판 목록
   @GetMapping
@@ -119,8 +122,7 @@ public class BoardController {
       @PathVariable("id") Long boardId,
       @Valid @ModelAttribute("updateForm") UpdateForm updateForm,
       BindingResult bindingResult,
-      RedirectAttributes redirectAttributes,
-      Model model
+      RedirectAttributes redirectAttributes
   ){
     if(bindingResult.hasErrors()){
       log.info("bindingResult = {}",bindingResult);
@@ -164,6 +166,5 @@ public class BoardController {
 
     return "redirect:/boards";
   }
-
 
 }

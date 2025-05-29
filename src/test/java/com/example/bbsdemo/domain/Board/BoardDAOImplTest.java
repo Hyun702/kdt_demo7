@@ -50,7 +50,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     }
 
     @Test
-    @DisplayName("게시글 조회")
+    @DisplayName("게시글 개별 조회")
     void findById() {
       Long boardId = 7L;
       Optional<Board> optionalBoard = boardDao.findById(boardId);
@@ -88,7 +88,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     }
 
     @Test
-    @DisplayName("게시글 삭제")
+    @DisplayName("게시글 다중 삭제")
     void deleteByids() {
       List<Long> ids = List.of(25L, 23L);
       int rows = boardDao.DeleteByIds(ids);
